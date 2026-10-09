@@ -45,7 +45,7 @@ export const REASON_CATALOG: Record<ReasonCode, CatalogEntry> = {
     parts: (p) => ({
       found: `Your household reported ${money(p.gross)} a month before deductions. That is over the ${money(p.limit)} limit for ${people(p.size)}.`,
       why: "A household with someone who is 60 or older, or who has a disability, gets a second look. Income is checked again after allowed costs, against a lower limit.",
-      action: "See the next two notes for how that second check came out.",
+      action: "The notes above show how that second check came out.",
     }),
   },
   FAP_NET_INCOME_FIGURED: {
@@ -123,6 +123,12 @@ export const STATUS_BY_DETERMINATION: Record<Determination, ProgramStatus> = {
   ELIGIBLE: "likely-eligible",
   INELIGIBLE: "likely-ineligible",
   REVIEW: "needs-review",
+};
+
+export const STATUS_LABELS: Record<ProgramStatus, string> = {
+  "likely-eligible": "Likely eligible",
+  "likely-ineligible": "Likely not eligible",
+  "needs-review": "Needs review",
 };
 
 const SHORT_NAMES: Record<ProgramCode, string> = { FAP: "Food Assistance", HMP: "Healthy Michigan Plan" };

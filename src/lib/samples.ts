@@ -37,7 +37,7 @@ export const SAMPLES: Sample[] = [
       members: [m(67, 0, 2400), m(64, 0, 1300, true)],
       shelterCost: "2650",
       dependentCareCost: "800",
-      applicantRef: "SAMPLE-C",
+      applicantRef: "",
     },
   },
   {

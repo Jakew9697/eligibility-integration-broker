@@ -19,7 +19,7 @@ export function About() {
           </p>
         </div>
         <div>
-          <p className="m-0">Every number comes from these public policy items, at the version in effect on the date shown, plus the 2026 HHS poverty guideline.</p>
+          <p className="m-0">Every number comes from these public policy items, at the version in effect on the date shown, plus the <a className="policy-link" href="https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines" target="_blank" rel="noopener noreferrer">2026 HHS poverty guideline<span className="sr-only"> (opens in a new tab)</span></a>.</p>
           <ul className="mb-0 mt-2 grid list-none gap-1 p-0">
             {SOURCES.map((p) => (
               <li key={p.item}>

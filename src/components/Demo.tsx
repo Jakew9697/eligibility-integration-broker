@@ -40,7 +40,10 @@ export function Demo() {
     if (!pendingFocus) return;
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (pendingFocus === "summary") summaryRef.current?.focus();
-    else resultsRef.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+    else {
+      resultsRef.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+      resultsRef.current?.focus({ preventScroll: true });
+    }
     setPendingFocus(null);
   }, [pendingFocus]);
 

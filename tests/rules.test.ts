@@ -73,7 +73,7 @@ describe("T3 senior or disabled household over 200% uses the net income test", (
   it("is eligible when net is at or under 100% and cites BEM 213", () => {
     const d = fap(couple(2650));
     expect(d.determination).toBe("ELIGIBLE");
-    expect(d.reasons.map((r) => r.code)).toEqual(["FAP_SDV_GROSS_OVER_200", "FAP_NET_INCOME_FIGURED", "FAP_SDV_NET_UNDER_100"]);
+    expect(d.reasons.map((r) => r.code)).toEqual(["FAP_SDV_NET_UNDER_100", "FAP_NET_INCOME_FIGURED", "FAP_SDV_GROSS_OVER_200"]);
     expect(cites(d)).toContain("BEM 213");
     expect(cites(d)).toContain("BEM 556");
   });
@@ -81,7 +81,7 @@ describe("T3 senior or disabled household over 200% uses the net income test", (
   it("is ineligible when net stays over 100%", () => {
     const d = fap(couple(1500));
     expect(d.determination).toBe("INELIGIBLE");
-    expect(d.reasons.at(-1)?.code).toBe("FAP_SDV_NET_OVER_100");
+    expect(d.reasons[0]?.code).toBe("FAP_SDV_NET_OVER_100");
   });
 
   it("a household with nobody 60+ or disabled over 200% is simply over the limit", () => {
@@ -91,7 +91,7 @@ describe("T3 senior or disabled household over 200% uses the net income test", (
 
   it("a disabled adult under 60 also gets the net test", () => {
     const d = fap(ruleInput({ members: [member(45, 0, 2800, true)], shelterCost: 2800 }));
-    expect(d.reasons[0]?.code).toBe("FAP_SDV_GROSS_OVER_200");
+    expect(d.reasons.at(-1)?.code).toBe("FAP_SDV_GROSS_OVER_200");
   });
 });
 

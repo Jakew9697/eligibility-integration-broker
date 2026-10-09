@@ -67,13 +67,14 @@ function determineFap(input: RuleInput): ProgramDetermination {
   return {
     program: "FAP",
     determination: eligible ? "ELIGIBLE" : "INELIGIBLE",
+    // The deciding note comes first, then how net income was figured, then the over-200% context.
     reasons: [
-      { code: "FAP_SDV_GROSS_OVER_200", params: limitParams },
+      { code: eligible ? "FAP_SDV_NET_UNDER_100" : "FAP_SDV_NET_OVER_100", params: { net: str(net.net), limit: str(limits.net100), size } },
       {
         code: "FAP_NET_INCOME_FIGURED",
         params: { counted: str(net.counted), care: str(net.care), shelter: str(net.excessShelter), afterCare: str(net.afterCare), net: str(net.net) },
       },
-      { code: eligible ? "FAP_SDV_NET_UNDER_100" : "FAP_SDV_NET_OVER_100", params: { net: str(net.net), limit: str(limits.net100), size } },
+      { code: "FAP_SDV_GROSS_OVER_200", params: limitParams },
     ],
   };
 }

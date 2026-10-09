@@ -68,6 +68,7 @@ describe("T5 gateway authentication and validation", () => {
     const paths = body.fieldErrors.map((e: { path: string }) => e.path);
     expect(paths).toContain("members.0.age");
     expect(paths).toContain("shelterCost");
+    expect(body.fieldErrors.find((e: { path: string }) => e.path === "members.0.age").message).toMatch(/^Person 1, age:/);
     expect(body.fieldErrors.every((e: { message: string }) => e.message.length > 0)).toBe(true);
   });
 
@@ -212,7 +213,7 @@ describe("audit through the gateway", () => {
     const entries = broker.audit.entries();
     expect(entries.map((e) => e.outcome)).toEqual([
       "issued: screening:write (200)",
-      "accepted: FAP likely-eligible, HMP likely-eligible (200)",
+      "accepted: FAP Likely eligible, HMP Likely eligible (200)",
       "denied: no token (401)",
       "rejected: invalid body (400)",
     ]);

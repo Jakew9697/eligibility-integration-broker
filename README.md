@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/Jakew9697/eligibility-integration-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/Jakew9697/eligibility-integration-broker/actions/workflows/ci.yml)
 
+Live demo: https://jakew9697.github.io/eligibility-integration-broker/
+
 Independent portfolio demo by Jake Worsham. Not affiliated with or endorsed by the State of Michigan or MDHHS. All people and data are made up. This is not a benefits decision.
 
 ## What it is
@@ -59,7 +61,7 @@ bun run dev        # http://localhost:3000
 bun run test       # Vitest
 bun run typecheck
 bun run build      # static export to out/
-bun run serve      # the same handlers over HTTP on localhost:8787
+bun run serve      # the same handlers over HTTP on localhost:8787 (set PORT to change it)
 ```
 
 `bun run serve` generates the demo client ID and secret each time it starts and prints them as `export` lines. Copy those into your shell, then:

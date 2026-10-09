@@ -2,6 +2,7 @@ import type { AuditLog } from "./audit";
 import { ErrorBody, ScreeningRequest, ScreeningResponse, type ProgramResult, type TraceStep } from "./contracts";
 import { CORRELATION_HEADER, json, pickCorrelationId, type Handler } from "./http";
 import type { OAuthServer } from "./oauth";
+import { STATUS_LABELS } from "./rules/catalog";
 import type { RuleInput, WageVerification } from "./rules/types";
 import { INCOME_PATH } from "./services/income";
 import { LEGACY_PATH, SOAP_ACTION, SoapFault, buildDetermineRequest, parseFault } from "./soap";
@@ -25,6 +26,12 @@ class UpstreamError extends Error {
   constructor(message: string) {
     super(message);
   }
+}
+
+/** Puts the person in the message so a list of errors says who each one is about. */
+function namePerson(path: PropertyKey[], message: string): string {
+  const person = path[0] === "members" && typeof path[1] === "number" ? `Person ${path[1] + 1}, ` : "";
+  return person ? person + message.charAt(0).toLowerCase() + message.slice(1) : message;
 }
 
 const ms = (since: number) => performance.now() - since;
@@ -65,7 +72,7 @@ export function createGateway(deps: GatewayDeps): Handler {
     // 2. Validate the body
     const parsed = ScreeningRequest.safeParse(await req.json().catch(() => undefined));
     if (!parsed.success) {
-      const fieldErrors = parsed.error.issues.map((i) => ({ path: i.path.join("."), message: i.message }));
+      const fieldErrors = parsed.error.issues.map((i) => ({ path: i.path.join("."), message: namePerson(i.path, i.message) }));
       const message = fieldErrors.length ? `The request has ${fieldErrors.length === 1 ? "1 problem" : `${fieldErrors.length} problems`}. Fix the fields listed and send it again.` : "The request body must be JSON.";
       return reject(400, "invalid_request", message, "rejected: invalid body", { fieldErrors });
     }
@@ -125,7 +132,7 @@ export function createGateway(deps: GatewayDeps): Handler {
 
       // 5. Audit, then answer
       const auditStart = performance.now();
-      const summary = results.map((r) => `${r.program} ${r.status}`).join(", ");
+      const summary = results.map((r) => `${r.program} ${STATUS_LABELS[r.status]}`).join(", ");
       const entry = await deps.audit.append({ correlationId, clientId, action: "screening.request", outcome: `accepted: ${summary} (200)` });
       deps.recordStep?.({
         name: "Audit log",

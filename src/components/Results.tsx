@@ -1,10 +1,11 @@
 import type { ProgramResult, ProgramStatus } from "@/broker/contracts";
+import { STATUS_LABELS } from "@/broker/rules/catalog";
 import { formatDate } from "@/lib/format";
 import type { RunOutcome } from "@/lib/runner";
 
 const STATUS: Record<ProgramStatus, { label: string; className: string; icon: React.ReactNode }> = {
   "likely-eligible": {
-    label: "Likely eligible",
+    label: STATUS_LABELS["likely-eligible"],
     className: "pill-ok",
     icon: (
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -13,7 +14,7 @@ const STATUS: Record<ProgramStatus, { label: string; className: string; icon: Re
     ),
   },
   "likely-ineligible": {
-    label: "Likely not eligible",
+    label: STATUS_LABELS["likely-ineligible"],
     className: "pill-no",
     icon: (
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
@@ -22,7 +23,7 @@ const STATUS: Record<ProgramStatus, { label: string; className: string; icon: Re
     ),
   },
   "needs-review": {
-    label: "Needs review",
+    label: STATUS_LABELS["needs-review"],
     className: "pill-review",
     icon: (
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">

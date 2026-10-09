@@ -13,9 +13,9 @@ export const HouseholdMember = z.object({
     .int({ error: "Age: enter a whole number from 0 to 120." })
     .min(0, "Age: enter a whole number from 0 to 120.")
     .max(120, "Age: enter a whole number from 0 to 120."),
-  disabled: z.boolean({ error: "Disability: choose yes or no." }),
-  earnedIncome: money("Earned income").default(0).describe("Reported monthly wages before taxes, in dollars."),
-  unearnedIncome: money("Other income").default(0).describe("Reported monthly income that is not wages, in dollars."),
+  disabled: z.boolean({ error: "Has a disability: choose yes or no." }),
+  earnedIncome: money("Pay per month").default(0).describe("Reported monthly wages before taxes, in dollars."),
+  unearnedIncome: money("Other income per month").default(0).describe("Reported monthly income that is not wages, in dollars."),
 });
 
 export const ScreeningRequest = z
@@ -28,8 +28,8 @@ export const ScreeningRequest = z
       .array(HouseholdMember, { error: "Members: list each person in the household." })
       .min(1, "Members: list at least one person.")
       .max(12, "Members: no more than 12 people."),
-    shelterCost: money("Shelter cost").describe("Monthly rent or mortgage plus utilities, in dollars."),
-    dependentCareCost: money("Dependent care cost").describe("Monthly cost of care that lets someone work or study, in dollars."),
+    shelterCost: money("Rent or mortgage plus utilities").describe("Monthly rent or mortgage plus utilities, in dollars."),
+    dependentCareCost: money("Child or adult care costs").describe("Monthly cost of care that lets someone work or study, in dollars."),
     applicantRef: z
       .string()
       .regex(/^[A-Z0-9-]{1,20}$/, "Wage record reference: use capital letters, numbers and dashes, up to 20 characters.")
