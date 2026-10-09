@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Contract for the demo's legacy eligibility service. SOAP 1.1, document/literal.
+  Made up for this portfolio demo. It describes no real state system.
+-->
+<wsdl:definitions name="EligibilityService"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="urn:demo:eligibility:v1"
+    targetNamespace="urn:demo:eligibility:v1">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:demo:eligibility:v1" elementFormDefault="qualified">
+
+      <xsd:element name="DetermineEligibilityRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="HouseholdSize" type="xsd:positiveInteger"/>
+            <xsd:element name="Members">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="Member" maxOccurs="12">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="Age" type="xsd:nonNegativeInteger"/>
+                        <xsd:element name="Disabled" type="xsd:boolean"/>
+                        <xsd:element name="EarnedIncome" type="xsd:decimal"/>
+                        <xsd:element name="UnearnedIncome" type="xsd:decimal"/>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="ShelterCost" type="xsd:decimal"/>
+            <xsd:element name="DependentCareCost" type="xsd:decimal"/>
+            <xsd:element name="WageVerification">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="Status">
+                    <xsd:simpleType>
+                      <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="VERIFIED"/>
+                        <xsd:enumeration value="NO_RECORD"/>
+                        <xsd:enumeration value="NOT_REQUESTED"/>
+                      </xsd:restriction>
+                    </xsd:simpleType>
+                  </xsd:element>
+                  <xsd:element name="MonthlyWages" type="xsd:decimal" minOccurs="0"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="DetermineEligibilityResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Program" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="Determination">
+                    <xsd:simpleType>
+                      <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="ELIGIBLE"/>
+                        <xsd:enumeration value="INELIGIBLE"/>
+                        <xsd:enumeration value="REVIEW"/>
+                      </xsd:restriction>
+                    </xsd:simpleType>
+                  </xsd:element>
+                  <xsd:element name="Reason" maxOccurs="unbounded">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="Param" minOccurs="0" maxOccurs="unbounded">
+                          <xsd:complexType>
+                            <xsd:simpleContent>
+                              <xsd:extension base="xsd:string">
+                                <xsd:attribute name="name" type="xsd:string" use="required"/>
+                              </xsd:extension>
+                            </xsd:simpleContent>
+                          </xsd:complexType>
+                        </xsd:element>
+                      </xsd:sequence>
+                      <xsd:attribute name="code" type="xsd:string" use="required"/>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+                <xsd:attribute name="code" use="required">
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:enumeration value="FAP"/>
+                      <xsd:enumeration value="HMP"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:attribute>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="CorrelationId" type="xsd:string"/>
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="DetermineEligibilityIn">
+    <wsdl:part name="parameters" element="tns:DetermineEligibilityRequest"/>
+    <wsdl:part name="correlation" element="tns:CorrelationId"/>
+  </wsdl:message>
+  <wsdl:message name="DetermineEligibilityOut">
+    <wsdl:part name="parameters" element="tns:DetermineEligibilityResponse"/>
+  </wsdl:message>
+
+  <wsdl:portType name="EligibilityPortType">
+    <wsdl:operation name="DetermineEligibility">
+      <wsdl:input message="tns:DetermineEligibilityIn"/>
+      <wsdl:output message="tns:DetermineEligibilityOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="EligibilitySoapBinding" type="tns:EligibilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DetermineEligibility">
+      <soap:operation soapAction="DetermineEligibility"/>
+      <wsdl:input>
+        <soap:header message="tns:DetermineEligibilityIn" part="correlation" use="literal"/>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="EligibilityService">
+    <wsdl:port name="EligibilityPort" binding="tns:EligibilitySoapBinding">
+      <soap:address location="http://localhost:8787/legacy/EligibilityService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
