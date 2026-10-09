@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Jakew9697/eligibility-integration-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/Jakew9697/eligibility-integration-broker/actions/workflows/ci.yml)
 
-Live demo: https://jakew9697.github.io/eligibility-integration-broker/
+Live demo: https://eligibility-broker.syncgr.com
 
 Independent portfolio demo by Jake Worsham. Not affiliated with or endorsed by the State of Michigan or MDHHS. All people and data are made up. This is not a benefits decision.
 
